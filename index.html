@@ -21,8 +21,9 @@
             --glass-highlight: rgba(255, 255, 255, 0.15);
             --text-primary: #FFFFFF;
             --text-secondary: #C7C7C7;
-              /* Balanced card sizing for uniform tiles across filters */
-              --card-min-width: 360px; /* tile width used for all cards */
+          /* Balanced card sizing for uniform tiles across filters */
+          /* reduced for better mobile fit */
+          --card-min-width: 280px; /* tile width used for all cards */
               --card-height: 360px; /* overall card height for uniform tiles */
               --thumb-height: 200px; /* image/thumb height inside the card */
         }
@@ -113,6 +114,11 @@
             align-items: center;
             border-bottom: none;
         }
+
+          /* Hide the mobile menu toggle on desktop by default; it will be shown in the
+              mobile media query (max-width:480px). This prevents the menu icon appearing
+              in large/desktop viewports (as seen in the screenshot). */
+          .menu-toggle { display: none; }
 
         /* When header has this class it moves up (hidden). Removed when user scrolls up. */
         .header-hidden {
@@ -242,6 +248,13 @@
             box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
         }
 
+        /* Touch target sizing: ensure buttons are comfortable on mobile */
+        .btn-primary, .btn-secondary, .form-submit, .filter-tab {
+            min-height: 44px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
         .btn-primary:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(108, 99, 255, 0.6);
@@ -265,6 +278,12 @@
             background: rgba(0, 229, 255, 0.2);
             transform: translateY(-5px);
             box-shadow: 0 0 30px var(--accent);
+        }
+
+        /* Focus visible for keyboard users (accessibility) */
+        a:focus, button:focus, .filter-tab:focus, input:focus, textarea:focus {
+            outline: 3px solid rgba(0,229,255,0.18);
+            outline-offset: 2px;
         }
 
         .home-right {
@@ -500,7 +519,10 @@
 
             .newsletter-card .newsletter-content { text-align: center; }
             .newsletter-card .newsletter-form { flex: 1 1 auto; width: 100%; justify-content: center; }
-            .newsletter-card .newsletter-form input { max-width: 100%; }
+            /* Stack the input and button vertically on medium/smaller screens for better touch UX */
+            .newsletter-card .newsletter-form { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
+            .newsletter-card .newsletter-form input { max-width: 100%; width: 100%; }
+            .newsletter-card .newsletter-form button { width: 100%; }
         }
 
         /* Portfolio Section */
@@ -1848,6 +1870,126 @@
             .contact-container { grid-template-columns: 1fr !important; }
             .contact-info { order: 2; }
             .contact-form { order: 3; }
+
+            /* Ensure the home/video stack becomes a simple vertical flow on small tablets and large phones
+               (forces strict one-below-the-other stacking regardless of earlier absolute transforms). */
+            .home-right { order: 2; }
+            .video-stack {
+                position: static !important;
+                height: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 14px !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            .video-card {
+                position: relative !important;
+                width: calc(100% - 32px) !important;
+                max-width: 520px !important;
+                height: auto !important;
+                border-radius: 14px !important;
+                overflow: hidden !important;
+                transform: none !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+
+            /* Explicitly override any nth-child transforms (these had higher specificity earlier).
+               Use the same specificity (nth-child) with !important so mobile stacking cannot be broken. */
+            .video-stack .video-card:nth-child(1),
+            .video-stack .video-card:nth-child(2),
+            .video-stack .video-card:nth-child(3) {
+                transform: none !important;
+                margin: 0 auto !important;
+                left: auto !important;
+                top: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+
+            .video-card video, .video-card iframe {
+                width: 100% !important;
+                height: auto !important;
+                aspect-ratio: 16/9 !important;
+                display: block !important;
+            }
+        }
+
+        /* Mobile-first enhancements: make layout friendlier on small phones */
+        @media (max-width: 480px) {
+            html, body { font-size: 15px; }
+            header { padding: 12px 18px; }
+            .logo { font-size: 20px; }
+            .menu-toggle { display: inline-flex; align-items:center; justify-content:center; font-size:22px; background:transparent; border:none; color:var(--text-primary); cursor:pointer; min-width:48px; min-height:48px; }
+            nav { position: absolute; top: 64px; right: 12px; background: linear-gradient(180deg, rgba(12,12,18,0.98), rgba(8,8,12,0.98)); border-radius: 12px; box-shadow: 0 16px 60px rgba(0,0,0,0.6); display:none; z-index: 2000; }
+            nav.open { display:block; }
+            nav ul { display:flex; flex-direction:column; gap:8px; padding:12px; min-width:180px; }
+            nav a { font-size:16px; padding:10px 6px; display:block; min-height:44px; }
+
+            /* Hide custom cursor on touch devices for usability */
+            .cursor-glow { display: none; }
+
+            /* Home hero and video stack adjustments */
+            /* Stack home content vertically and make video cards responsive */
+            /* Increase top padding so the fixed navbar doesn't visually overlap the hero on small screens */
+            #home { padding-top: 96px; display:flex; flex-direction:column; gap:18px; }
+            .home-left { order: 1; text-align: center; }
+            .home-left h1 { font-size: 30px; }
+            .home-left p { font-size: 15px; }
+            .home-right { order: 2; display:flex; justify-content:center; }
+            .video-stack { position: static; height: auto; display:flex; flex-direction:column; gap: 14px; align-items:center; justify-content:center; }
+            .video-card { position: relative; width: calc(100% - 32px); max-width: 360px; height: auto; border-radius: 14px; overflow: hidden; transform: none !important; }
+            .video-card video, .video-card iframe { width:100%; height:auto; aspect-ratio: 16/9; display:block; }
+
+            /* Newsletter card stacks vertically and compresses */
+            .newsletter-card { padding: 20px; gap: 14px; }
+            .newsletter-card .newsletter-content h2 { font-size: 20px; }
+            /* ensure newsletter form elements are stacked and full width on very small phones */
+            .newsletter-card .newsletter-form { display:flex; flex-direction: column; gap: 12px; align-items: stretch; }
+            .newsletter-card .newsletter-form input { width: 100%; }
+            .newsletter-card .newsletter-form button { width: 100%; }
+
+            /* Modal responsiveness */
+            .modal .modal-content { width: 96%; max-width: none; padding: 12px; }
+            .modal-video { height: calc(56.25vw); /* 16:9 */ }
+            /* On very small phones make the modal full-screen for better viewing */
+            .modal .modal-content.fullscreen, .modal.fullscreen .modal-content { width:100%; max-width:none; height:100vh; border-radius:0; padding:12px; }
+            .modal.fullscreen .modal-video, .modal .modal-content.fullscreen .modal-video { height: calc(100vh - 96px); }
+
+            /* Portfolio: ensure single column and smaller thumbs */
+            .portfolio-grid { grid-template-columns: 1fr; gap: 18px; }
+            .portfolio-grid .thumb-wrap { height: 160px; }
+
+            /* About section adjustments */
+            .about-hero { font-size: 28px; }
+            .about-text { font-size: 14px; }
+
+            /* Contact: ensure form and info are full width and touch-friendly */
+            /* Contact: ensure form and info are full width, stacked and inside viewport */
+            .contact-info-card.merged, .contact-form { padding: 20px; transform: none !important; margin-left: 0 !important; max-width: 100% !important; }
+            .contact-container { grid-template-columns: 1fr !important; transform: none !important; }
+            .contact-info .contact-info-card.merged { transform: none !important; position: relative !important; }
+            .contact-info .contact-info-card.merged h4 { font-size: 20px; }
+            .contact-info .contact-info-card.merged p { font-size: 15px; }
+
+            /* Reduce visual noise: smaller floating shapes or hide entirely on very small screens */
+            .contact-floats { display: none !important; }
+        }
+
+        /* Slightly larger phones/tablets portrait */
+        @media (min-width: 481px) and (max-width: 768px) {
+            header { padding: 14px 22px; }
+            .menu-toggle { display:inline-flex; }
+            nav { display:none; }
+            nav.open { display:block; }
+            .cursor-glow { display:none; }
+            .video-stack { height: 340px; }
+            .video-card { width: 260px; height:150px; }
+            .contact-floats { right: 22px; top: 24px; }
         }
     </style>
 </head>
@@ -1864,7 +2006,8 @@
     <!-- Header -->
     <header>
         <div class="logo">EDITKARO</div>
-        <nav>
+        <button class="menu-toggle" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">☰</button>
+        <nav id="mainNav" role="navigation">
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#portfolio">Portfolio</a></li>
@@ -1917,7 +2060,8 @@
                 <p style="color: var(--text-secondary); margin: 6px 0 0 0;">Join our list for tips, offers and behind-the-scenes edits.</p>
             </div>
             <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
-                <input type="email" placeholder="Enter your email" required>
+                <label for="newsletter-email" style="position:absolute;left:-9999px;">Enter your mail box</label>
+                <input id="newsletter-email" type="email" placeholder="Enter your mail box" aria-label="Enter your mail box" required>
                 <button type="submit">Subscribe</button>
             </form>
         </div>
@@ -2296,6 +2440,51 @@
     </script>
 
     <script>
+        // Mobile nav toggle
+        (function(){
+            const btn = document.querySelector('.menu-toggle');
+            const nav = document.querySelector('header nav');
+            if(!btn || !nav) return;
+            btn.addEventListener('click', ()=>{
+                nav.classList.toggle('open');
+                btn.setAttribute('aria-expanded', nav.classList.contains('open'));
+            });
+            // close nav when a link is clicked (mobile)
+            nav.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> nav.classList.remove('open')));
+            // click-outside: close nav if clicking outside
+            document.addEventListener('click', (e) => {
+                if (!nav.classList.contains('open')) return;
+                const isClickInside = nav.contains(e.target) || btn.contains(e.target);
+                if (!isClickInside) {
+                    nav.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            });
+            // close nav on Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && nav.classList.contains('open')) {
+                    nav.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.focus();
+                }
+            });
+            // simple focus trap while nav is open
+            nav.addEventListener('keydown', (e) => {
+                if (e.key !== 'Tab' || !nav.classList.contains('open')) return;
+                const focusable = nav.querySelectorAll('a');
+                if (focusable.length === 0) return;
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault(); last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault(); first.focus();
+                }
+            });
+        })();
+    </script>
+
+    <script>
         // About section animated reveal + lightweight parallax (uses GSAP)
         (function(){
             const about = document.querySelector('#about');
@@ -2606,12 +2795,15 @@
             const modal = document.getElementById('videoModal');
             const modalVideo = document.getElementById('modalVideo');
             const videoId = getYouTubeID(url);
+            // detect touch devices to avoid autoplaying videos on phones
+            const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+            const autoplayAttr = isTouch ? '' : 'autoplay';
             // If YouTube ID is missing or known to be blocked from embedding, fall back to a local MP4 so video is watchable on-site.
             const blockedIds = ['020g-0hhCAU']; // known blocked/unavailable YouTube IDs
             if (!videoId || blockedIds.includes(videoId)) {
                 // fallback to a local mp4 (ensure file exists in the workspace)
                 modalVideo.innerHTML = `
-                    <video controls autoplay playsinline style="width:100%; height:100%; max-height:80vh; object-fit:contain; display:block;">
+                    <video controls ${autoplayAttr} playsinline preload="metadata" style="width:100%; height:100%; max-height:80vh; object-fit:contain; display:block;">
                         <source src="236711_small.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -2621,6 +2813,8 @@
             }
 
             // show modal with animation classes
+            // if on a very small screen, make the modal full-screen for better viewing
+            if (window.innerWidth <= 480) modal.classList.add('fullscreen');
             modal.classList.add('active');
             // allow CSS animation to run on the content
             requestAnimationFrame(() => modal.classList.add('show'));
@@ -2632,14 +2826,18 @@
                 // Open modal with the local second video (236711_small.mp4)
                 const modal = document.getElementById('videoModal');
                 const modalVideo = document.getElementById('modalVideo');
-                // insert a responsive <video> with controls so user can watch/pause in the modal
-                modalVideo.innerHTML = `
-                    <video controls autoplay playsinline style="width:100%; height:100%; max-height:80vh; object-fit:contain; display:block;">
-                        <source src="236711_small.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                `;
+                    // detect touch devices to avoid autoplaying videos on phones
+                    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+                    const autoplayAttr = isTouch ? '' : 'autoplay';
+                    // insert a responsive <video> with controls so user can watch/pause in the modal
+                    modalVideo.innerHTML = `
+                        <video controls ${autoplayAttr} playsinline preload="metadata" style="width:100%; height:100%; max-height:80vh; object-fit:contain; display:block;">
+                            <source src="236711_small.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    `;
                 modal.classList.add('active');
+                if (window.innerWidth <= 480) modal.classList.add('fullscreen');
                 requestAnimationFrame(() => modal.classList.add('show'));
                 disableBodyScroll();
             }
@@ -2653,6 +2851,8 @@
                 // wait for animation to finish then clear
                 setTimeout(() => {
                     modal.classList.remove('active');
+                    // remove fullscreen marker in case it was added for small screens
+                    modal.classList.remove('fullscreen');
                     modalVideo.innerHTML = '';
                     restoreBodyScroll();
                 }, 260);
