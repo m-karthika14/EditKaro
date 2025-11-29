@@ -1,0 +1,19 @@
+# humanstxt.org
+
+/* TEAM */
+Website: EDITKARO
+Location: Bangalore, Karnataka, India
+Contact: +91 98765 43210
+
+/* SITE */
+Last update: 2025/11/29
+Standards: HTML5, CSS3, JavaScript ES6+
+Components: GSAP, Google Fonts, PWA
+Software: VS Code, GitHub, GitHub Pages
+SEO: Complete professional optimization
+Responsive: Mobile-first, 320px - 2560px+
+
+/* THANKS */
+Font: Poppins, Inter (Google Fonts)
+Icons: Custom designed
+Hosting: GitHub Pages

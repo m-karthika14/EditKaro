@@ -2054,10 +2054,56 @@
                 padding: 10px 20px;
                 font-size: 14px;
             }
-            /* mobile: merged contact card should be full width and sit above the form */
-            .contact-container { grid-template-columns: 1fr !important; }
-            .contact-info { order: 2; }
-            .contact-form { order: 3; }
+            
+            /* Contact: Tablet-optimized centered layout */
+            #contact {
+                padding: 80px 32px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            
+            .contact-container { 
+                grid-template-columns: 1fr !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 32px !important;
+                width: 100% !important;
+                max-width: 600px !important;
+                margin: 0 auto !important;
+                transform: none !important;
+            }
+            
+            .contact-info { 
+                order: 1 !important;
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            
+            .contact-form { 
+                order: 2 !important;
+                width: 100% !important;
+            }
+            
+            .contact-info-card.merged {
+                text-align: center !important;
+                width: 100% !important;
+                transform: none !important;
+                margin: 0 !important;
+            }
+            
+            .contact-info .contact-info-card.merged .contact-detail {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            
+            .contact-info .contact-info-card.merged .social-icons {
+                justify-content: center !important;
+            }
 
             /* Ensure the home/video stack becomes a simple vertical flow on small tablets and large phones
                (forces strict one-below-the-other stacking regardless of earlier absolute transforms). */
@@ -2156,15 +2202,113 @@
             .about-hero { font-size: 28px; }
             .about-text { font-size: 14px; }
 
-            /* Contact: ensure form and info are full width and touch-friendly */
-            /* Contact: ensure form and info are full width, stacked and inside viewport */
-            .contact-info-card.merged, .contact-form { padding: 20px; transform: none !important; margin-left: 0 !important; max-width: 100% !important; }
-            .contact-container { grid-template-columns: 1fr !important; transform: none !important; }
-            .contact-info .contact-info-card.merged { transform: none !important; position: relative !important; }
-            .contact-info .contact-info-card.merged h4 { font-size: 20px; }
-            .contact-info .contact-info-card.merged p { font-size: 15px; }
+            /* Contact: Mobile-optimized centered layout */
+            #contact { 
+                padding: 60px 18px !important; 
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            
+            .section-header {
+                text-align: center !important;
+                width: 100% !important;
+            }
+            
+            .contact-container { 
+                grid-template-columns: 1fr !important; 
+                transform: none !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 24px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+            }
+            
+            .contact-info {
+                width: 100% !important;
+                max-width: 100% !important;
+                order: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            
+            .contact-info-card.merged, .contact-form { 
+                padding: 24px !important; 
+                transform: none !important; 
+                margin: 0 !important; 
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            
+            .contact-info .contact-info-card.merged { 
+                transform: none !important; 
+                position: relative !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+            
+            .contact-info .contact-info-card.merged .contact-info-heading {
+                font-size: 28px !important;
+                text-align: center !important;
+            }
+            
+            .contact-info .contact-info-card.merged h4 { 
+                font-size: 18px !important;
+                text-align: center !important;
+            }
+            
+            .contact-info .contact-info-card.merged p { 
+                font-size: 14px !important;
+                text-align: center !important;
+            }
+            
+            .contact-info .contact-info-card.merged .contact-detail {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 8px !important;
+            }
+            
+            .contact-info .contact-info-card.merged .social-icons {
+                display: flex !important;
+                justify-content: center !important;
+                gap: 12px !important;
+                margin-top: 12px !important;
+            }
+            
+            .contact-form {
+                order: 2 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            .contact-form form {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 16px !important;
+            }
+            
+            .contact-form .form-group {
+                width: 100% !important;
+            }
+            
+            .contact-form input,
+            .contact-form textarea {
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            
+            .contact-form button {
+                width: 100% !important;
+                justify-content: center !important;
+            }
 
-            /* Reduce visual noise: smaller floating shapes or hide entirely on very small screens */
+            /* Reduce visual noise: hide floating shapes on very small screens */
             .contact-floats { display: none !important; }
         }
 
@@ -2179,4 +2323,433 @@
             .video-card { width: 260px; height:150px; }
             .contact-floats { right: 22px; top: 24px; }
         }
+
+        /* ==================== COMPREHENSIVE RESPONSIVE ENHANCEMENTS ==================== */
+        
+        /* Extra Small Devices (320px - 480px) */
+        @media (max-width: 320px) {
+            :root {
+                --card-min-width: 100%;
+                --card-height: 340px;
+                --thumb-height: 180px;
+            }
+            
+            html, body { font-size: 14px; }
+            
+            /* Make everything fit in tiny screens */
+            header { padding: 10px 12px; }
+            .logo { font-size: 18px; }
+            
+            section { padding: 40px 12px !important; }
+            
+            .section-header h2 { font-size: 24px !important; }
+            .section-header p { font-size: 13px !important; }
+            
+            /* Stats - stack vertically */
+            .stats-grid { 
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            
+            /* Service cards - full width */
+            .services-grid {
+                grid-template-columns: 1fr !important;
+                gap: 14px !important;
+            }
+            
+            /* Testimonials - adjust for tiny screens */
+            .testimonial-card {
+                padding: 16px !important;
+            }
+            
+            .carousel-dots {
+                gap: 6px !important;
+            }
+            
+            /* About cards stack */
+            .card-stack {
+                gap: 12px !important;
+            }
+            
+            .card {
+                padding: 16px !important;
+            }
+            
+            /* Buttons full width on tiny screens */
+            .cta-buttons {
+                flex-direction: column !important;
+                width: 100% !important;
+            }
+            
+            .btn, .btn-secondary {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+            
+            /* Contact: Extra small screen optimizations */
+            #contact {
+                padding: 40px 12px !important;
+            }
+            
+            .contact-container {
+                gap: 16px !important;
+            }
+            
+            .contact-info-card.merged, .contact-form {
+                padding: 18px !important;
+            }
+            
+            .contact-info .contact-info-card.merged .contact-info-heading {
+                font-size: 24px !important;
+            }
+            
+            .contact-info .contact-info-card.merged h4 {
+                font-size: 16px !important;
+            }
+            
+            .contact-info .contact-info-card.merged p {
+                font-size: 13px !important;
+            }
+            
+            .contact-info .contact-info-card.merged .social-icon {
+                width: 44px !important;
+                height: 44px !important;
+                font-size: 18px !important;
+            }
+        }
+
+        /* Small Tablets and Large Phones (481px - 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            :root {
+                --card-min-width: 260px;
+                --card-height: 350px;
+            }
+            
+            /* Stats - 2 columns */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px !important;
+            }
+            
+            /* Services - 2 columns */
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            
+            /* Portfolio - 2 columns */
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            
+            /* About section adjustments */
+            .about-content {
+                flex-direction: column !important;
+                gap: 24px !important;
+            }
+            
+            .about-text-side {
+                max-width: 100% !important;
+            }
+            
+            /* Contact - still stack but with better spacing */
+            .contact-container {
+                gap: 24px !important;
+                max-width: 500px !important;
+                margin: 0 auto !important;
+            }
+            
+            .contact-info,
+            .contact-form {
+                width: 100% !important;
+            }
+            
+            .contact-info-card.merged {
+                text-align: center !important;
+            }
+            
+            .contact-info .contact-info-card.merged .contact-detail {
+                align-items: center !important;
+            }
+            
+            .contact-info .contact-info-card.merged .social-icons {
+                justify-content: center !important;
+            }
+        }
+
+        /* Tablets (769px - 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            :root {
+                --card-min-width: 280px;
+            }
+            
+            /* Home section - adjust layout */
+            #home {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+            
+            .home-container {
+                flex-direction: column !important;
+                gap: 32px !important;
+            }
+            
+            .home-left, .home-right {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            
+            .home-left {
+                text-align: center !important;
+            }
+            
+            .cta-buttons {
+                justify-content: center !important;
+            }
+            
+            /* Stats - 2 or 3 columns depending on space */
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+            }
+            
+            /* Portfolio - 3 columns */
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+            
+            /* Services - 3 columns */
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+            
+            /* About - side by side but adjust sizing */
+            .about-content {
+                gap: 32px !important;
+            }
+            
+            /* Contact - adjust merged card positioning */
+            .contact-info-card.merged {
+                transform: translateX(-10%) !important;
+            }
+        }
+
+        /* Small Laptops (1025px - 1280px) */
+        @media (min-width: 1025px) and (max-width: 1280px) {
+            #home {
+                padding-left: 60px !important;
+                padding-right: 60px !important;
+            }
+            
+            section {
+                padding-left: 60px !important;
+                padding-right: 60px !important;
+            }
+            
+            .home-left h1 {
+                font-size: 48px !important;
+            }
+            
+            /* Portfolio - 3 columns */
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+        }
+
+        /* Large Screens (1281px - 1600px) */
+        @media (min-width: 1281px) and (max-width: 1600px) {
+            /* Portfolio - 4 columns */
+            .portfolio-grid {
+                grid-template-columns: repeat(4, 1fr) !important;
+            }
+        }
+
+        /* Extra Large Screens (1601px+) */
+        @media (min-width: 1601px) {
+            .container, section {
+                max-width: 1600px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            
+            /* Portfolio - 4 or 5 columns */
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+            }
+        }
+
+        /* Landscape Orientation Adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            /* Reduce vertical spacing in landscape mode */
+            section {
+                padding-top: 40px !important;
+                padding-bottom: 40px !important;
+            }
+            
+            #home {
+                padding-top: 80px !important;
+                padding-bottom: 40px !important;
+            }
+            
+            .home-left h1 {
+                font-size: 32px !important;
+            }
+            
+            .home-left p {
+                font-size: 16px !important;
+            }
+            
+            /* Reduce modal height */
+            .modal-video {
+                max-height: 70vh !important;
+            }
+        }
+
+        /* Touch Device Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            /* Remove hover effects on touch devices */
+            .portfolio-card:hover {
+                transform: none !important;
+            }
+            
+            .service-card:hover {
+                transform: translateY(0) !important;
+            }
+            
+            .btn:hover, .btn-secondary:hover {
+                transform: none !important;
+            }
+            
+            /* Increase touch targets */
+            button, a, input, textarea {
+                min-height: 44px !important;
+                min-width: 44px !important;
+            }
+            
+            /* Make filter tabs easier to tap */
+            .filter-tab {
+                padding: 12px 20px !important;
+                min-height: 44px !important;
+            }
+            
+            /* Larger form inputs */
+            input[type="email"],
+            input[type="text"],
+            input[type="tel"],
+            textarea {
+                padding: 14px !important;
+                font-size: 16px !important; /* Prevents zoom on iOS */
+            }
+        }
+
+        /* High DPI Screens (Retina) */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            /* Sharper borders and shadows */
+            .portfolio-card,
+            .service-card,
+            .card,
+            .newsletter-card {
+                border-width: 0.5px !important;
+            }
+        }
+
+        /* Reduced Motion Preference */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .particle {
+                animation: none !important;
+            }
+            
+            .cursor-glow {
+                transition: none !important;
+            }
+            
+            .floating-shape {
+                animation: none !important;
+            }
+        }
+
+        /* Dark Mode Support (if user prefers dark) */
+        @media (prefers-color-scheme: dark) {
+            /* Already dark, but ensure consistency */
+            :root {
+                --text-primary: #FFFFFF;
+                --text-secondary: #C7C7C7;
+                --secondary: #0F0F0F;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .cursor-glow,
+            .scroll-progress,
+            .bg-particles,
+            header,
+            .menu-toggle,
+            .cta-buttons,
+            .filter-tabs,
+            .modal,
+            .contact-floats,
+            .floating-shape {
+                display: none !important;
+            }
+            
+            section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            a {
+                text-decoration: underline !important;
+            }
+        }
+
+        /* Accessibility: Focus Visible Styles */
+        *:focus-visible {
+            outline: 3px solid var(--accent) !important;
+            outline-offset: 2px !important;
+        }
+
+        /* Ensure all interactive elements are keyboard accessible */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        .filter-tab:focus-visible,
+        .carousel-dot:focus-visible {
+            outline: 3px solid var(--accent) !important;
+            outline-offset: 2px !important;
+        }
+
+        /* Fix any overflow issues on all screen sizes */
+        html, body {
+            overflow-x: hidden !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+        }
+
+        * {
+            max-width: 100% !important;
+        }
+
+        img, video, iframe {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Ensure sections don't overflow */
+        section {
+            width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
+        /* ==================== END RESPONSIVE ENHANCEMENTS ==================== */
    

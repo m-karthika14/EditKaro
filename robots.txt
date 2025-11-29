@@ -1,0 +1,44 @@
+# robots.txt for EDITKARO
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://m-karthika14.github.io/EditKaro/sitemap.xml
+
+# Crawl delay (optional - set to 1 second for better server performance)
+Crawl-delay: 1
+
+# Disallow access to any admin or private directories (if any)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow Google Image Bot
+User-agent: Googlebot-Image
+Allow: /public/
+
+# Allow all images to be indexed
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.avif$
+Allow: /*.mp4$
+
+# Bing
+User-agent: bingbot
+Allow: /
+
+# Yahoo
+User-agent: Slurp
+Allow: /
+
+# Yandex
+User-agent: Yandex
+Allow: /
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
