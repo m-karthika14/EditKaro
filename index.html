@@ -267,7 +267,7 @@
             <div class="video-stack">
                 <div class="video-card" style="--rotation: -10deg;">
                     <video autoplay muted loop playsinline preload="metadata" poster="" tabindex="-1" aria-hidden="true" title="EDITKARO video editing showcase - short-form content">
-                        <source src="public/214669_small.mp4" type="video/mp4">
+                        <source src="public/vidd.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
@@ -284,60 +284,6 @@
                     </video>
                 </div>
             </div>
-                
-                                <script>
-                                (function(){
-                                    // Respect reduced motion
-                                    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-                                    const pols = document.querySelectorAll('#about .polaroid');
-                                    if (!pols || !pols.length) return;
-                                    pols.forEach(el => {
-                                        // make focusable for keyboard users
-                                        el.tabIndex = 0;
-                                        // read base rotation from CSS var
-                                        const baseRot = getComputedStyle(el).getPropertyValue('--pol-rot') || '0deg';
-                                        let raf = null;
-                                        function resetTransform() {
-                                            el.style.transform = `rotate(${baseRot}) translateY(18px)`;
-                                            el.style.boxShadow = '';
-                                            const img = el.querySelector('img'); if (img) img.style.transform = '';
-                                        }
-                                        function onMove(e){
-                                            const rect = el.getBoundingClientRect();
-                                            const cx = (e.clientX - rect.left) / rect.width - 0.5; // -0.5..0.5
-                                            const cy = (e.clientY - rect.top) / rect.height - 0.5;
-                                            const ry = cx * 12; // rotateY
-                                            const rx = -cy * 8; // rotateX
-                                            cancelAnimationFrame(raf);
-                                            raf = requestAnimationFrame(()=>{
-                                                el.style.transform = `rotate(${baseRot}) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px) scale(1.02)`;
-                                                el.style.boxShadow = '0 90px 220px rgba(2,8,14,0.95), 0 30px 90px rgba(0,0,0,0.48), 0 0 160px rgba(0,229,255,0.18)';
-                                                const img = el.querySelector('img'); if (img) img.style.transform = 'translateZ(28px)';
-                                            });
-                                        }
-                                        function onLeave(){
-                                            cancelAnimationFrame(raf);
-                                            el.style.transition = 'transform 420ms cubic-bezier(.2,.9,.3,1), box-shadow 420ms ease';
-                                            resetTransform();
-                                            setTimeout(()=> el.style.transition = '', 440);
-                                        }
-                                        el.addEventListener('mousemove', onMove);
-                                        el.addEventListener('mouseleave', onLeave);
-                                        el.addEventListener('focus', ()=> el.classList.add('pol-focus'));
-                                        el.addEventListener('blur', ()=> el.classList.remove('pol-focus'));
-                                        el.addEventListener('click', ()=>{
-                                            el.classList.toggle('pol-active');
-                                            if (el.classList.contains('pol-active')){
-                                                el.style.transform = `rotate(${baseRot}) translateY(-30px) scale(1.08)`;
-                                                el.style.boxShadow = '0 110px 260px rgba(2,8,14,0.98), 0 40px 120px rgba(0,0,0,0.6), 0 0 200px rgba(0,229,255,0.2)';
-                                            } else {
-                                                resetTransform();
-                                            }
-                                        });
-                                        el.addEventListener('keydown', (ev)=>{ if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); el.click(); } });
-                                    });
-                                })();
-                                </script>
         </div>
     </section>
 
@@ -491,29 +437,55 @@
             /* Make the paragraph one line on wide screens and larger for emphasis */
             #about .who p { color:var(--text-secondary); max-width:1200px; margin:0 auto 22px; font-size:20px; line-height:1.2; white-space:nowrap; overflow:visible; }
             /* Polaroid cards: bigger, centered, and visually prominent */
-            #about .polaroids { display:grid; grid-template-columns: repeat(3, 1fr); gap:28px; justify-items:center; align-items:start; margin-top:48px; }
+            #about .polaroids { display:grid; grid-template-columns: repeat(3, 1fr); gap:28px; justify-items:center; align-items:start; margin-top:48px; max-width:1100px; margin-left:auto; margin-right:auto; }
             /* Polaroid cards: bigger, centered, and visually prominent; animate in with a pop/stagger and micro-hover */
             /* stagger polaroid entrance */
             #about .polaroids .polaroid:nth-child(1){ animation-delay:120ms; }
             #about .polaroids .polaroid:nth-child(2){ animation-delay:260ms; }
             #about .polaroids .polaroid:nth-child(3){ animation-delay:400ms; }
-            #about .polaroid img{ width:100%; height:220px; object-fit:cover; border-radius:8px; display:block; transition: transform 320ms cubic-bezier(.2,.9,.3,1), filter 320ms ease; }
+            /* DESKTOP ONLY: Square frame for image - classic polaroid style */
+            #about .polaroid .image-frame { width:252px; height:252px; background:#f5f5f5; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-bottom:16px; }
+            #about .polaroid .team-photo { width:100%; height:100%; object-fit:cover; object-position:center; display:block; transition: transform 320ms cubic-bezier(.2,.9,.3,1), filter 320ms ease; }
             /* Hover interactions for images */
             #about .about-img:hover img { transform: translateY(-6px) scale(1.04); filter: drop-shadow(0 18px 36px rgba(2,8,14,0.45)); }
             /* blue glow on container hover for large about images */
             #about .about-img:hover { box-shadow: 0 48px 140px rgba(108,99,255,0.12), 0 12px 36px rgba(0,0,0,0.45); border-radius:14px; }
             /* Removed inner-image hover animation: the whole polaroid rises on hover instead */
-            /* Polaroid labels: designation (top) and first name (below) — both dark on white polaroid */
-            #about .polaroid .p-name{ margin-top:12px; font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; text-align:center; color:#0b0f14; }
-            #about .polaroid .p-role{ text-align:center; color:#0b0f14; font-size:14px; margin-top:6px; font-weight:600; }
+            /* Team member text: Role (bold) then Name (normal) - below the square frame */
+            #about .polaroid .team-role { font-family:'Poppins',sans-serif; font-weight:700; font-size:17px; text-align:center; color:#0b0f14; line-height:1.4; margin:0 0 4px 0; }
+            #about .polaroid .team-name { text-align:center; color:#505050; font-size:14px; margin:0; font-weight:400; line-height:1.4; }
             /* polaroid hover: lift the whole card (preserve each card's rotation) */
             /* polaroid base + hover glow */
-            /* Deeper, layered shadow for polaroid cards to give a pronounced floating effect */
-            #about .polaroid { position:relative; background:#fff; color:#0b0f14; border-radius:12px; padding:14px 12px 20px; width:320px; box-shadow: 0 60px 160px rgba(2,8,14,0.9), 0 18px 60px rgba(0,0,0,0.42), 0 0 20px rgba(108,99,255,0.04); transform: rotate(var(--pol-rot, -2deg)) translateY(18px); opacity:1; transition: transform 180ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms ease; animation: polaroidPop 560ms cubic-bezier(.2,.9,.3,1) forwards; animation-play-state: paused; will-change: transform; overflow: visible; }
-            #about .polaroid::after{ content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); width: 120%; height: 36px; background: radial-gradient(closest-side, rgba(108,99,255,0.12), transparent 60%); filter: blur(14px); opacity: 0.06; pointer-events:none; transition: opacity 220ms ease, transform 220ms ease; }
-            /* Stronger hover shadow to emphasize lift and add a blue glow */
-            #about .polaroid:hover{ box-shadow: 0 80px 220px rgba(2,8,14,0.95), 0 30px 90px rgba(0,0,0,0.48), 0 0 120px rgba(108,99,255,0.16); transform: rotate(var(--pol-rot, -2deg)) translateY(-22px) scale(1.04); }
-            #about .polaroid:hover::after{ opacity: 0.32; transform: translateX(-50%) translateY(6px); }
+            /* Card styling - Classic polaroid: white background with square frame */
+            #about .polaroid { 
+                position:relative; 
+                background:#ffffff; 
+                color:#0b0f14; 
+                border-radius:16px; 
+                padding:20px; 
+                width:300px !important; 
+                height:auto !important;
+                min-width:300px; 
+                max-width:300px;
+                box-sizing:border-box; 
+                box-shadow: 0 8px 32px rgba(2,8,14,0.12), 0 3px 12px rgba(0,0,0,0.08); 
+                transform: rotate(var(--pol-rot, -2deg)) translateY(18px); 
+                opacity:1; 
+                transition: transform 180ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms ease; 
+                animation: polaroidPop 560ms cubic-bezier(.2,.9,.3,1) forwards; 
+                animation-play-state: paused; 
+                will-change: transform; 
+                overflow: visible; 
+                display:flex; 
+                flex-direction:column; 
+                align-items:center; 
+                justify-content:flex-start;
+                gap:0;
+            }
+            #about .polaroid::after{ content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); width: 120%; height: 36px; background: radial-gradient(closest-side, rgba(108,99,255,0.08), transparent 60%); filter: blur(14px); opacity: 0.06; pointer-events:none; transition: opacity 220ms ease, transform 220ms ease; }
+            /* Hover effect - subtle lift like Card 1 */
+            #about .polaroid:hover{ box-shadow: 0 16px 48px rgba(2,8,14,0.16), 0 4px 12px rgba(0,0,0,0.12); transform: rotate(var(--pol-rot, -2deg)) translateY(-8px) scale(1.02); }
+            #about .polaroid:hover::after{ opacity: 0.12; transform: translateX(-50%) translateY(4px); }
 
             /* Subtle entrance animations */
             #about .fade-up{ opacity:0; transform: translateY(18px); animation: fadeUp 560ms ease forwards; }
@@ -648,23 +620,84 @@
 
                 <div class="polaroids">
                     <div class="polaroid" style="--pol-rot: -2deg;">
-                        <img src="public/found1.png" alt="EDITKARO Lead Video Editor - Professional video editing specialist" loading="lazy" width="300" height="300">
-                        <div class="p-name">Lead Editor</div>
-                        <div class="p-role">Lessi</div>
+                        <div class="image-frame">
+                            <img src="public/found1.png" alt="EDITKARO Lead Video Editor - Professional video editing specialist" loading="lazy" width="300" height="300" class="team-photo">
+                        </div>
+                        <h3 class="team-role">Lead Editor</h3>
+                        <p class="team-name">Lessi</p>
                     </div>
                     <div class="polaroid" style="--pol-rot: 2deg;">
-                        <img src="public/found2.png" alt="EDITKARO Creative Designer - Motion graphics and visual effects expert" loading="lazy" width="300" height="300">
-                        <div class="p-name">Creative Designer</div>
-                        <div class="p-role">Raj</div>
+                        <div class="image-frame">
+                            <img src="public/found2.png" alt="EDITKARO Creative Designer - Motion graphics and visual effects expert" loading="lazy" width="300" height="300" class="team-photo">
+                        </div>
+                        <h3 class="team-role">Creative Designer</h3>
+                        <p class="team-name">Raj</p>
                     </div>
                     <div class="polaroid" style="--pol-rot: -1deg;">
-                        <img src="public/found3.png" alt="EDITKARO Video Strategist - Content strategy and storytelling specialist" loading="lazy" width="300" height="300">
-                        <div class="p-name">Video Strategist</div>
-                        <div class="p-role">Anita</div>
+                        <div class="image-frame">
+                            <img src="public/found3.png" alt="EDITKARO Video Strategist - Content strategy and storytelling specialist" loading="lazy" width="300" height="300" class="team-photo">
+                        </div>
+                        <h3 class="team-role">Video Strategist</h3>
+                        <p class="team-name">Anita</p>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <script>
+        // Polaroid card 3D interactions
+        (function(){
+            // Respect reduced motion
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const pols = document.querySelectorAll('#about .polaroid');
+            if (!pols || !pols.length) return;
+            pols.forEach(el => {
+                // make focusable for keyboard users
+                el.tabIndex = 0;
+                // read base rotation from CSS var
+                const baseRot = getComputedStyle(el).getPropertyValue('--pol-rot') || '0deg';
+                let raf = null;
+                function resetTransform() {
+                    el.style.transform = `rotate(${baseRot}) translateY(18px)`;
+                    el.style.boxShadow = '';
+                    const img = el.querySelector('img'); if (img) img.style.transform = '';
+                }
+                function onMove(e){
+                    const rect = el.getBoundingClientRect();
+                    const cx = (e.clientX - rect.left) / rect.width - 0.5; // -0.5..0.5
+                    const cy = (e.clientY - rect.top) / rect.height - 0.5;
+                    const ry = cx * 12; // rotateY
+                    const rx = -cy * 8; // rotateX
+                    cancelAnimationFrame(raf);
+                    raf = requestAnimationFrame(()=>{
+                        el.style.transform = `rotate(${baseRot}) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px) scale(1.02)`;
+                        el.style.boxShadow = '0 90px 220px rgba(2,8,14,0.95), 0 30px 90px rgba(0,0,0,0.48), 0 0 160px rgba(0,229,255,0.18)';
+                        const img = el.querySelector('img'); if (img) img.style.transform = 'translateZ(28px)';
+                    });
+                }
+                function onLeave(){
+                    cancelAnimationFrame(raf);
+                    el.style.transition = 'transform 420ms cubic-bezier(.2,.9,.3,1), box-shadow 420ms ease';
+                    resetTransform();
+                    setTimeout(()=> el.style.transition = '', 440);
+                }
+                el.addEventListener('mousemove', onMove);
+                el.addEventListener('mouseleave', onLeave);
+                el.addEventListener('focus', ()=> el.classList.add('pol-focus'));
+                el.addEventListener('blur', ()=> el.classList.remove('pol-focus'));
+                el.addEventListener('click', ()=>{
+                    el.classList.toggle('pol-active');
+                    if (el.classList.contains('pol-active')){
+                        el.style.transform = `rotate(${baseRot}) translateY(-30px) scale(1.08)`;
+                        el.style.boxShadow = '0 110px 260px rgba(2,8,14,0.98), 0 40px 120px rgba(0,0,0,0.6), 0 0 200px rgba(0,229,255,0.2)';
+                    } else {
+                        resetTransform();
+                    }
+                });
+                el.addEventListener('keydown', (ev)=>{ if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); el.click(); } });
+            });
+        })();
+        </script>
     </section>
 
     <!-- Testimonials Section -->

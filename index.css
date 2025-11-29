@@ -1717,8 +1717,8 @@
             /* Overlap styling: make the left merged contact card extend under the form on wide screens */
             @media (min-width: 1025px) {
                 /* align items to the top so overlap looks intentional */
-                /* Move the entire contact block to the right so both cards shift together */
-                .contact-container { align-items: start; transform: translateX(180px); transition: transform 260ms ease; }
+                /* Center the contact cards more */
+                .contact-container { align-items: start; transform: translateX(0px); transition: transform 260ms ease; }
                 .contact-info { position: relative; }
                 /* merged card: keep only a vertical nudge so both columns align as a unit */
                 .contact-info .contact-info-card.merged {
@@ -1734,7 +1734,7 @@
                     z-index: 2;
                     margin-left: -48px; /* overlap amount */
                     box-shadow: 0 30px 80px rgba(0,0,0,0.65);
-                    max-width: 580px;
+                    max-width: 420px;
                     transform: none;
                     transition: transform 260ms ease;
                 }
@@ -1742,11 +1742,11 @@
 
             /* Slightly reduce overlap on medium-large screens */
             @media (min-width: 1280px) and (max-width: 1600px) {
-                .contact-form { margin-left: -48px; }
+                .contact-form { margin-left: -48px; max-width: 420px; }
                 /* merged card: vertical nudge only on medium-large screens */
                 .contact-info .contact-info-card.merged { transform: translate(0, 94px); }
-                /* move container right slightly (smaller than desktop) */
-                .contact-container { transform: translateX(135px); }
+                /* center the container */
+                .contact-container { transform: translateX(0px); }
                 .contact-form { transform: none; }
             }
 

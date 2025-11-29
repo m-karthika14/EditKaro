@@ -339,6 +339,28 @@ function openVideoModal(url) {
   disableBodyScroll();
 }
 
+// Handle demo button
+function openModal(type) {
+  if (type === 'demo') {
+    // Open demo reel video
+    const modal = $id('videoModal');
+    const modalVideo = $id('modalVideo');
+    if (!modal || !modalVideo) return;
+    modalVideo.innerHTML = `<video controls autoplay playsinline preload="metadata" style="width:100%; height:100%; max-height:80vh; object-fit:contain; display:block;"></video>`;
+    const v = modalVideo.querySelector('video'); 
+    if (v) { 
+      const src = document.createElement('source'); 
+      src.src = 'public/214669_small.mp4'; 
+      src.type = 'video/mp4'; 
+      v.appendChild(src); 
+    }
+    modal.classList.add('active'); 
+    if (window.innerWidth <= 480) modal.classList.add('fullscreen'); 
+    requestAnimationFrame(() => modal.classList.add('show'));
+    disableBodyScroll();
+  }
+}
+
 function closeModal() {
   const modal = $id('videoModal'); const modalVideo = $id('modalVideo'); if (!modal || !modalVideo) return;
   modal.classList.remove('show'); setTimeout(() => { modal.classList.remove('active'); modal.classList.remove('fullscreen'); modalVideo.innerHTML = ''; restoreBodyScroll(); }, 260);
