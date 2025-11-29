@@ -1,0 +1,2182 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6C63FF;
+            --secondary: #0F0F0F;
+            --accent: #00E5FF;
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #FFFFFF;
+            --text-secondary: #C7C7C7;
+                        /* Card surface variables to keep left and right cards identical */
+                        --card-bg-start: rgba(7,12,25,0.88);
+                        --card-bg-end: rgba(12,16,30,0.82);
+                        --card-backdrop: blur(16px) saturate(1.1);
+                        --card-box-shadow: 0 30px 80px rgba(2,8,14,0.72);
+                        --card-border: 1px solid rgba(255,255,255,0.04);
+                        --card-radius: 22px;
+          /* Balanced card sizing for uniform tiles across filters */
+          /* reduced for better mobile fit */
+          --card-min-width: 280px; /* tile width used for all cards */
+              --card-height: 360px; /* overall card height for uniform tiles */
+              --thumb-height: 200px; /* image/thumb height inside the card */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0F0F0F 0%, #1a1a2e 50%, #16213e 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            cursor: auto;
+        }
+
+        /* Custom Cursor */
+        .cursor-glow {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
+            mix-blend-mode: screen;
+        }
+
+        .cursor-glow.active {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            z-index: 9999;
+            transition: width 0.1s;
+        }
+
+        /* Background Particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-200px) translateX(-30px); }
+            75% { transform: translateY(-100px) translateX(80px); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 80px;
+            /* fully transparent header: no background, no blur, no divider */
+            background: transparent;
+            backdrop-filter: none;
+            z-index: 1000;
+            /* prepare for hide/show on scroll */
+            transform: translateY(0);
+            transition: transform 240ms ease-in-out;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: none;
+        }
+
+          /* Hide the mobile menu toggle on desktop by default; it will be shown in the
+              mobile media query (max-width:480px). This prevents the menu icon appearing
+              in large/desktop viewports (as seen in the screenshot). */
+          .menu-toggle { display: none; }
+
+        /* When header has this class it moves up (hidden). Removed when user scrolls up. */
+        .header-hidden {
+            transform: translateY(-110%);
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            color: var(--text-primary);
+            text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* Section Base */
+        section {
+            position: relative;
+            min-height: 100vh;
+            padding: 100px 80px;
+            z-index: 1;
+        }
+
+        /* Make all sections visually match the main page background (remove local section backgrounds)
+           This forces the entire site sections to sit on the same page gradient as requested. */
+        section {
+            background: transparent !important;
+        }
+
+        /* Tighter spacing specifically between statistics and about sections */
+        #stats {
+            padding-bottom: 20px !important;
+            padding-top: 40px !important;
+            /* prevent occupying full viewport height so it won't force a giant gap */
+            min-height: auto !important;
+        }
+        #about {
+            /* reduced top padding so sections don't create large blank gaps */
+            padding-top: 16px !important;
+            padding-bottom: 60px !important;
+            min-height: auto !important;
+        }
+
+        /* Home Section */
+        #home {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+            padding-top: 150px;
+        }
+
+        .home-left {
+            flex: 1;
+            animation: fadeInLeft 1s ease-out;
+        }
+
+        .home-left h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 72px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .home-left p {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 24px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .home-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--text-primary);
+            border: none;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(108, 99, 255, 0.4);
+        }
+
+        /* Touch target sizing: ensure buttons are comfortable on mobile */
+        .btn-primary, .btn-secondary, .form-submit, .filter-tab {
+            min-height: 44px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(108, 99, 255, 0.6);
+        }
+
+        .btn-secondary {
+            padding: 18px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            border: 2px solid var(--accent);
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 229, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px var(--accent);
+        }
+
+        /* Focus visible for keyboard users (accessibility) */
+        a:focus, button:focus, .filter-tab:focus, input:focus, textarea:focus {
+            outline: 3px solid rgba(0,229,255,0.18);
+            outline-offset: 2px;
+        }
+
+        .home-right {
+            flex: 1;
+            position: relative;
+            animation: fadeInRight 1s ease-out;
+        }
+
+        .video-stack {
+            position: relative;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-card {
+            position: absolute;
+            width: 320px;
+            height: 180px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+            transition: all 0.4s;
+            animation: float-video 6s ease-in-out infinite;
+        }
+
+        .video-card:nth-child(1) {
+            top: 50px;
+            left: 0;
+            transform: rotate(-10deg);
+            animation-delay: 0s;
+        }
+
+        .video-card:nth-child(2) {
+            top: 200px;
+            right: 0;
+            transform: rotate(10deg);
+            animation-delay: 2s;
+        }
+
+        .video-card:nth-child(3) {
+            bottom: 50px;
+            left: 50%;
+            /* Lock the transform to keep the card tilted in the same place and prevent any animation
+               from overriding its translate/rotate. This targets only the 3rd card as requested. */
+            transform: translateX(-50%) rotate(5deg) !important;
+            animation-delay: 4s;
+        }
+
+        .video-card:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 10;
+        }
+
+        /* Preserve the horizontal centering for the 3rd card on hover/touch so it doesn't shift
+           (the base transform includes translateX(-50%) for centering). This rule only targets
+           the third card and does not modify other cards or animations. */
+        .video-card:nth-child(3):hover {
+            transform: translateX(-50%) scale(1.1) rotate(0deg) !important;
+            z-index: 10;
+        }
+
+        .video-card iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* make local video elements fill the card and preserve aspect with cover
+           and be non-interactive so native play UI doesn't appear */
+        .video-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: none;
+            display: block;
+            pointer-events: none; /* prevent native interaction UI */
+            user-select: none;
+        }
+
+        /* Non-positional animation for video cards: pulse the glow while keeping cards fixed in place.
+           This preserves the visual animation (box-shadow / brightness pulse) but does NOT change
+           the card's position or translate values (so nth-child translateX/rotate values remain intact).
+        */
+        @keyframes float-video {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 229, 255, 0.45);
+                filter: brightness(1);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(0, 229, 255, 0.8);
+                filter: brightness(1.06);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Newsletter Section -> converted into a centered glass card */
+        #newsletter {
+            /* make the section itself transparent so page background shows through */
+            min-height: auto;
+            padding: 60px 80px;
+            background: transparent;
+            position: relative;
+            overflow: visible;
+        }
+
+        /* Glass card wrapper — centered and sized */
+        .newsletter-card {
+            position: relative;
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 36px 48px;
+            border-radius: 18px;
+            /* darker default background for stronger contrast */
+            background: rgba(6, 6, 10, 0.82); /* darker glass */
+            backdrop-filter: blur(14px) saturate(120%);
+            -webkit-backdrop-filter: blur(14px) saturate(120%);
+            border: 1px solid rgba(255,255,255,0.06);
+            /* stronger visible blue/purple outline + soft glow (visible by default) */
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.80), /* much deeper shadow for darker appearance */
+                0 6px 28px rgba(0,229,255,0.06), /* subtle cyan base */
+                0 0 0 3px rgba(108,99,255,0.28), /* slightly thicker visible purple rim */
+                0 0 0 6px rgba(0,229,255,0.10), /* more visible cyan outer stroke */
+                0 0 48px rgba(0,229,255,0.16); /* stronger cyan glow */
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateY(20px) scale(0.995);
+            animation: newsletterCardEnter 700ms cubic-bezier(.2,.9,.3,1) forwards;
+            /* transitions for hover micro-interactions */
+            transition: transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 260ms ease, border-color 260ms ease, background-color 260ms ease;
+        }
+
+        .newsletter-card .newsletter-content {
+            flex: 1 1 60%;
+            text-align: left;
+        }
+
+        .newsletter-card .newsletter-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        /* Form sits to the right on wide screens */
+        .newsletter-card .newsletter-form {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex: 0 0 360px;
+            justify-content: flex-end;
+        }
+
+        .newsletter-card .newsletter-form input {
+            flex: 1 1 auto;
+            padding: 14px 20px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: var(--text-primary);
+            outline: none;
+            transition: box-shadow 220ms ease, transform 160ms ease;
+        }
+
+        .newsletter-card .newsletter-form input::placeholder { color: rgba(199,199,199,0.6); }
+
+        .newsletter-card .newsletter-form input:focus {
+            box-shadow: 0 6px 24px rgba(0,229,255,0.08);
+            transform: translateY(-2px);
+            border-color: rgba(0,229,255,0.25);
+        }
+
+        .newsletter-card .newsletter-form button {
+            padding: 12px 26px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            color: var(--text-primary);
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(108,99,255,0.12);
+            transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+
+        .newsletter-card .newsletter-form button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 50px rgba(108,99,255,0.18);
+        }
+
+        /* Hover state for the full card: lift, subtle scale and stronger glow (with colored border glow) */
+        .newsletter-card:hover {
+            transform: translateY(-8px) scale(1.015);
+            /* base shadow + colored glow layers for a neon border effect */
+            box-shadow:
+                0 28px 80px rgba(0,0,0,0.82), /* deeper, darker shadow */
+                0 10px 44px rgba(0,229,255,0.04), /* subtle cyan halo */
+                0 0 28px rgba(0,229,255,0.10), /* inner cyan glow */
+                0 0 72px rgba(108,99,255,0.10); /* purple rim */
+            border-color: rgba(0,229,255,0.18);
+            /* significantly darker hover background for stronger contrast */
+            background: rgba(8,8,12,0.78);
+        }
+
+        /* On hover, add a colored glow around the card border */
+
+        @keyframes newsletterCardEnter {
+            from { opacity: 0; transform: translateY(20px) scale(0.995); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Responsive: stack contents on small screens */
+        @media (max-width: 880px) {
+            .newsletter-card {
+                flex-direction: column;
+                gap: 18px;
+                padding: 28px;
+            }
+
+            .newsletter-card .newsletter-content { text-align: center; }
+            .newsletter-card .newsletter-form { flex: 1 1 auto; width: 100%; justify-content: center; }
+            /* Stack the input and button vertically on medium/smaller screens for better touch UX */
+            .newsletter-card .newsletter-form { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
+            .newsletter-card .newsletter-form input { max-width: 100%; width: 100%; }
+            .newsletter-card .newsletter-form button { width: 100%; }
+        }
+
+        /* Portfolio Section */
+        #portfolio {
+            padding: 120px 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 56px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .filter-tab {
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab:hover, .filter-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-color: transparent;
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        /* Portfolio grid (uniform grid for all filters) */
+        .portfolio-grid {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 12px;
+            display: grid;
+            /* use the shared min width so cards are consistent with the screenshot */
+            grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), 1fr));
+            gap: 28px;
+            align-items: stretch;
+            justify-items: stretch;
+        }
+
+        /* individual cards — uniform size and flexible content */
+        .portfolio-card {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0;
+            vertical-align: top;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+            backdrop-filter: blur(14px) saturate(120%);
+            -webkit-backdrop-filter: blur(14px) saturate(120%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            transition: transform 300ms cubic-bezier(.2,.9,.3,1), box-shadow 300ms ease, filter 300ms ease;
+            transform-origin: center center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(18px) scale(0.995);
+            will-change: transform;
+                /* enforce consistent card height and let grid control width
+                    for single/few items we set a fixed width via .portfolio-grid.few */
+                height: var(--card-height);
+                min-height: var(--card-height);
+                max-width: none;
+        }
+
+        /* visible state when card scrolls into view */
+        .portfolio-card.in-view {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Card image / thumbnail */
+        .portfolio-card img {
+            width: 100%;
+            display: block;
+            /* make the image fill the thumb-wrap height so all cards visually align */
+            height: 100%;
+            object-fit: cover;
+            transition: transform 420ms cubic-bezier(.2,.9,.3,1), filter 320ms ease;
+        }
+
+        .portfolio-card .thumb-wrap {
+            width: 100%;
+            overflow: hidden;
+            background: rgba(0,0,0,0.06);
+        }
+
+        /* Fixed thumbnail height so each card has the same visual area */
+        .portfolio-grid .thumb-wrap {
+            height: var(--thumb-height); /* desktop default — change if you want denser layout */
+            overflow: hidden;
+        }
+
+        .portfolio-card .portfolio-card-content {
+            padding: 20px 22px 24px 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1 1 auto;
+            overflow: hidden;
+        }
+
+        /* When a category has only a few items (1-2) keep cards centered and constrained */
+        .portfolio-grid.few {
+            justify-items: center;
+        }
+
+        .portfolio-grid.few .portfolio-card {
+            /* constrain single/few items to the card min width so they visually match the grid cards */
+            width: var(--card-min-width);
+            max-width: var(--card-min-width);
+        }
+
+        .portfolio-card .portfolio-badge {
+            display: inline-block;
+            /* original smaller pill sizing - forced to avoid overrides */
+            padding: 6px 14px !important;
+            border-radius: 999px;
+            font-size: 12px !important;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            color: #0b0f14;
+            background: linear-gradient(90deg, #6C63FF, #00E5FF);
+            box-shadow: 0 6px 18px rgba(108,99,255,0.12);
+            margin-bottom: 12px;
+            line-height: 1;
+            box-sizing: border-box;
+            /* Prevent badge from stretching to fill container */
+            width: auto !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .portfolio-card h3 { margin: 6px 0 8px 0; font-size: 18px; }
+        .portfolio-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0; }
+
+        /* Hover: lift + glow, subtle scale */
+        .portfolio-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 24px 80px rgba(4, 197, 201, 0.08), 0 8px 30px rgba(108,99,255,0.08);
+            filter: brightness(1.02);
+        }
+
+        .portfolio-card:hover img {
+            transform: scale(1.08) translateZ(0);
+            filter: saturate(1.05) contrast(1.02);
+        }
+
+        /* prevent breaks inside masonry columns for better visuals */
+        .portfolio-card { break-inside: avoid; -webkit-column-break-inside: avoid; -moz-column-break-inside: avoid; }
+
+        /* Responsive adjustments for grid */
+        @media (max-width: 1100px) {
+            .portfolio-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; }
+            .portfolio-grid .thumb-wrap { height: calc(var(--thumb-height) - 20px); }
+            /* slightly shorter cards on medium screens */
+            .portfolio-grid .portfolio-card { height: calc(var(--card-height) - 20px); min-height: calc(var(--card-height) - 20px); }
+        }
+        @media (max-width: 820px) {
+            .portfolio-grid { grid-template-columns: 1fr; gap: 20px; }
+            .portfolio-grid .thumb-wrap { height: calc(var(--thumb-height) - 40px); }
+            .portfolio-card { max-width: 720px; margin-left: auto; margin-right: auto; }
+            /* mobile: let cards be auto height to avoid clipping long descriptions */
+            .portfolio-grid .portfolio-card { height: auto; min-height: auto; }
+        }
+
+        /* Grid mode for filtered views (not 'All') */
+        .portfolio-grid.grid {
+            /* ensure grid takes precedence when .grid is present */
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), 1fr));
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .portfolio-grid.grid .portfolio-card {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            width: 100%;
+            break-inside: auto;
+            -webkit-column-break-inside: auto;
+        }
+
+        .portfolio-grid.grid .thumb-wrap {
+            flex: 0 0 var(--thumb-height);
+            overflow: hidden;
+        }
+
+        .portfolio-grid.grid .portfolio-card-content {
+            flex: 1 1 auto;
+        }
+
+        .portfolio-card-content {
+            padding: 25px;
+        }
+
+        .portfolio-badge {
+            display: inline-block;
+            /* match the smaller pill used inside cards - force to ensure visibility */
+            padding: 6px 14px !important;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 999px;
+            font-size: 12px !important;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1;
+            box-sizing: border-box;
+            /* Prevent badge from stretching to fill container */
+            width: auto !important;
+            max-width: none !important;
+            white-space: nowrap !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .portfolio-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(6px);
+            z-index: 9998;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 220ms ease;
+        }
+
+        .modal.active { display: flex; opacity: 1; }
+
+        /* ---------------- Contact Section (new styles) --------------------------- */
+        #contact { padding: 80px 80px; }
+        .contact-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 48px;
+            align-items: flex-start;
+        }
+        .contact-left { flex: 1 1 60%; }
+        .contact-left h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 40px;
+            margin: 0 0 12px 0;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .contact-lead { color: var(--text-secondary); margin-bottom: 20px; font-size: 15px; max-width: 560px; }
+        .contact-list { list-style: none; padding: 0; margin: 18px 0 12px 0; display: grid; gap: 14px; }
+        .contact-list li { display:flex; gap:14px; align-items:center; color: var(--text-primary); font-weight:700; font-size:17px; }
+        .contact-list .ci { color: var(--primary); flex: 0 0 28px; display:inline-flex; align-items:center; justify-content:center; }
+        .contact-list .ci svg { width:24px; height:24px; }
+        .contact-list .ci-text { color: var(--text-primary); font-weight:700; font-size:17px; }
+        .contact-highlights { margin-top: 16px; display:flex; gap:10px; flex-wrap:wrap; }
+        .contact-badge { display:inline-block; padding:8px 12px; background: linear-gradient(90deg,var(--primary),var(--accent)); color:#fff; border-radius:999px; font-weight:700; font-size:13px; box-shadow:0 6px 20px rgba(108,99,255,0.10); }
+
+        .contact-detail { display:none; }
+
+        .contact-right { flex: 0 0 420px; }
+        .contact-card {
+            background: rgba(255,255,255,0.98);
+            color: #0b0f14;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+            display:flex; flex-direction:column; gap:12px;
+        }
+        .contact-card input, .contact-card textarea {
+            border: 1px solid rgba(11,15,20,0.08);
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #0b0f14;
+            background: #fff;
+            outline: none;
+        }
+        .contact-card input:focus, .contact-card textarea:focus { box-shadow: 0 8px 30px rgba(108,99,255,0.06); border-color: rgba(108,99,255,0.22); }
+        .contact-card textarea { min-height: 120px; resize: vertical; }
+        .contact-card .form-submit {
+            border: none; padding: 14px 18px; border-radius: 8px; font-weight:700; cursor:pointer; color: #fff;
+        }
+        .contact-card .form-submit.gradient { background: linear-gradient(90deg, #6C63FF 0%, #FF6B6B 100%); box-shadow: 0 10px 30px rgba(108,99,255,0.18); }
+
+        /* Responsive: stack contact columns on small screens */
+        @media (max-width: 900px) {
+            .contact-wrapper { flex-direction: column; padding: 0 18px; }
+            .contact-right { width: 100%; flex: 1 1 auto; }
+            .contact-card { width: 100%; }
+        }
+
+        /* Increased visual hierarchy on left column */
+        .contact-left h2 { font-size: 48px; line-height: 1.03; }
+        .contact-lead { font-size: 16px; color: var(--text-secondary); }
+        .contact-list li { font-size: 15px; font-weight:600; color: var(--text-primary); }
+        .contact-list .ci { color: var(--accent); }
+
+
+        .modal .modal-content {
+            position: relative;
+            width: 92%;
+            max-width: 1000px;
+            background: linear-gradient(180deg, rgba(20,20,24,0.98), rgba(12,12,18,0.98));
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+            transform: scale(0.94) translateY(12px);
+            opacity: 0;
+            transition: transform 260ms cubic-bezier(.2,.9,.3,1), opacity 240ms ease;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s;
+            z-index: 1200; /* ensure close button sits above modal video content */
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .modal-video {
+            width: 100%;
+            height: 600px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-video iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Services Section */
+        #services {
+            padding: 120px 80px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            /* stronger visible blue border to guarantee visibility */
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.35s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            position: relative;
+            z-index: 1;
+            /* prominent default glow and outline using box-shadow */
+            box-shadow: 0 18px 60px rgba(0,229,255,0.08), 0 0 36px rgba(0,229,255,0.06), inset 0 2px 0 rgba(255,255,255,0.02);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0,229,255,0.98);
+            /* stronger hover glow */
+            box-shadow: 0 50px 160px rgba(0,229,255,0.22), 0 18px 60px rgba(0,229,255,0.12), inset 0 2px 0 rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* outer glow pseudo-element so the outline is cleaner and can be animated separately */
+        .service-card::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 104%;
+            height: 104%;
+            border-radius: 22px;
+            pointer-events: none;
+            z-index: 0;
+            box-shadow: 0 10px 40px rgba(0,229,255,0.03), 0 0 24px rgba(108,99,255,0.02);
+            transition: box-shadow 260ms ease, transform 260ms ease, opacity 260ms ease;
+            opacity: 1;
+            filter: blur(6px);
+        }
+
+        .service-card:hover::after {
+            box-shadow: 0 30px 120px rgba(0,229,255,0.12), 0 0 80px rgba(108,99,255,0.06);
+            transform: translate(-50%, -50%) scale(1.01);
+            opacity: 1;
+        }
+
+        .service-icon {
+            /* replaced emoji icon with a bordered circle that matches the cursor color (var(--accent)) */
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 3px solid var(--accent);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, filter 0.28s ease;
+            /* subtle default glow using accent tints - made stronger and visible */
+            box-shadow: 0 12px 36px rgba(0,229,255,0.08), 0 0 18px rgba(108,99,255,0.05), inset 0 1px 0 rgba(255,255,255,0.02);
+            will-change: transform, box-shadow;
+            /* gentle pulse to make the default glow visible but unobtrusive; slightly faster */
+            animation: serviceIconPulse 4.5s ease-in-out infinite;
+            position: relative;
+            overflow: visible;
+        }
+
+        .service-card:hover .service-icon {
+            transform: translateY(-6px) scale(1.03);
+            border-color: var(--accent);
+            /* stronger, more visible glow on hover */
+            box-shadow: 0 32px 120px rgba(0,229,255,0.22), 0 0 80px rgba(108,99,255,0.14), inset 0 1px 0 rgba(255,255,255,0.04);
+            filter: saturate(1.06) drop-shadow(0 14px 42px rgba(0,229,255,0.08));
+        }
+        /* small keyframes for subtle pulse of the default glow */
+        @keyframes serviceIconPulse {
+            0% { box-shadow: 0 10px 30px rgba(0,229,255,0.07), 0 0 12px rgba(108,99,255,0.03); }
+            50% { box-shadow: 0 20px 56px rgba(0,229,255,0.11), 0 0 28px rgba(108,99,255,0.06); }
+            100% { box-shadow: 0 10px 30px rgba(0,229,255,0.07), 0 0 12px rgba(108,99,255,0.03); }
+        }
+        /* Outer glow outline to make the default outline very visible even on dark backgrounds */
+        .service-icon::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 140%;
+            height: 140%;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 10px 40px rgba(0,229,255,0.06), 0 0 26px rgba(108,99,255,0.04);
+            opacity: 1;
+            transition: box-shadow 260ms ease, opacity 260ms ease;
+            filter: blur(8px);
+        }
+        .service-card:hover .service-icon::after {
+            box-shadow: 0 30px 120px rgba(0,229,255,0.18), 0 0 80px rgba(108,99,255,0.12);
+            opacity: 1;
+        }
+        /* make any SVG inside the icon white and sized appropriately */
+        .service-icon svg {
+            width: 44px;
+            height: 44px;
+            display: block;
+            fill: #ffffff;
+        }
+
+        .service-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* Statistics Section - redesigned: white icons inside accent circles, connecting lines and animations */
+        #stats {
+            padding: 80px 60px;
+            position: relative;
+            overflow: visible;
+        }
+
+        /* use a centered flexible row so we can draw connectors between items */
+        .stats-grid {
+            display: flex;
+            gap: 48px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .stat-card {
+            position: relative;
+            width: 220px;
+            min-width: 180px;
+            text-align: center;
+            padding: 28px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.04);
+            border-radius: 16px;
+            transition: transform 320ms ease, box-shadow 320ms ease;
+            z-index: 2;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(0,229,255,0.08);
+        }
+
+        /* icon circle that matches the cursor/accent color */
+        .stat-icon {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            margin: 0 auto 14px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--accent);
+            background: rgba(255,255,255,0.02);
+            box-shadow: 0 10px 30px rgba(0,229,255,0.06);
+            transition: transform 260ms ease, box-shadow 260ms ease;
+            position: relative;
+            overflow: visible;
+            animation: statIconPulse 3.6s ease-in-out infinite;
+        }
+
+        .stat-icon svg { width:40px; height:40px; fill: #ffffff; }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 48px;
+            color: var(--accent);
+            text-shadow: 0 0 26px rgba(0,229,255,0.16);
+            margin: 8px 0 6px 0;
+        }
+
+        .stat-label {
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* connecting lines between stat-cards (drawn from each card to the next) */
+        .stat-card:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), rgba(108,99,255,0.18));
+            border-radius: 4px;
+            z-index: 1;
+            opacity: 0;
+            animation: lineAppear 700ms ease forwards;
+            animation-delay: 300ms;
+        }
+
+        /* hide connectors on narrow screens */
+        @media (max-width: 900px) {
+            .stat-card:not(:last-child)::after { display: none; }
+            .stats-grid { gap: 22px; }
+        }
+
+        @keyframes lineAppear {
+            from { opacity: 0; transform: translateY(-50%) scaleX(0.1); }
+            to { opacity: 1; transform: translateY(-50%) scaleX(1); }
+        }
+
+        @keyframes statIconPulse {
+            0% { box-shadow: 0 8px 22px rgba(0,229,255,0.05); transform: translateY(0); }
+            50% { box-shadow: 0 20px 50px rgba(0,229,255,0.12); transform: translateY(-3px); }
+            100% { box-shadow: 0 8px 22px rgba(0,229,255,0.05); transform: translateY(0); }
+        }
+
+        /* About Section - premium split layout (override large top padding) */
+        #about {
+            padding: 16px 60px !important;
+            position: relative;
+            overflow: visible;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+            margin-top: 28px;
+        }
+
+        /* LEFT: text / hero / glass card stack */
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 5;
+        }
+
+        .about-hero {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 44px;
+            line-height: 1.02;
+            margin: 0 0 6px 0;
+            background: linear-gradient(90deg, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        .about-hero.underline {
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-hero.underline::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            height: 6px;
+            width: 60%;
+            background: linear-gradient(90deg, rgba(0,229,255,0.85), rgba(108,99,255,0.6));
+            border-radius: 6px;
+            filter: blur(6px);
+            opacity: 0.9;
+            transform: scaleX(0.2);
+            transform-origin: left center;
+        }
+
+        .about-sub { color: var(--text-secondary); font-size: 18px; margin-bottom: 12px; }
+
+        /* Big glass-morphism card */
+        .about-glass {
+            position: relative;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(25px);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 12px 40px rgba(0,229,255,0.03);
+            overflow: hidden;
+            transition: transform 0.6s cubic-bezier(.2,.9,.2,1), box-shadow 0.3s;
+            transform: translateY(0);
+        }
+
+        .about-glass::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 22px;
+            box-shadow: 0 0 50px rgba(0,229,255,0.08);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .about-glass:hover { transform: translateY(-6px); box-shadow: 0 22px 80px rgba(0,229,255,0.08); }
+
+        .about-glass h3 { color: var(--accent); font-size: 20px; margin-bottom: 12px; }
+        .about-glass p, .about-glass li { color: var(--text-secondary); font-size: 15px; line-height: 1.7; }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .values-cards { display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
+        .value-card { min-width:120px; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.08); padding:12px 16px; border-radius:12px; color:var(--text-secondary); transition:transform .25s, box-shadow .25s; }
+        .value-card:hover { transform: translateY(-6px); box-shadow: 0 14px 40px rgba(0,229,255,0.06); border-color: var(--accent); }
+
+        /* RIGHT: visuals */
+        .about-visual { position: relative; height: 640px; display:flex; align-items:center; justify-content:center; }
+
+        .about-bg-video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.08; filter: blur(4px) saturate(0.9); z-index:1; }
+
+        .visual-layer { position:relative; z-index:6; pointer-events:none; width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+
+        .floating-shape { position:absolute; border-radius:14px; background: linear-gradient(135deg, rgba(108,99,255,0.28), rgba(0,229,255,0.18)); border:1px solid rgba(255,255,255,0.06); mix-blend-mode: screen; animation: float-slow 12s ease-in-out infinite; }
+        .floating-shape.s1 { width:320px; height:240px; left:8%; top:8%; }
+        .floating-shape.s2 { width:200px; height:200px; right:6%; top:18%; animation-duration:14s; }
+        .floating-shape.s3 { width:140px; height:140px; right:18%; bottom:10%; animation-duration:11s; }
+
+        @keyframes float-slow { 0%{ transform: translateY(0) rotate(0deg);} 50%{ transform: translateY(-20px) rotate(6deg);} 100%{ transform: translateY(0) rotate(0deg);} }
+
+        /* founders */
+        .founders { position: absolute; bottom: 40px; left: 8%; display:flex; gap:18px; z-index:8; }
+        .founder-card { width:220px; backdrop-filter: blur(20px); background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:12px; border-radius:14px; display:flex; gap:12px; align-items:center; transition: transform .35s, box-shadow .25s; cursor:pointer; }
+        .founder-card:hover { transform: translateY(-8px) rotate(-1deg); box-shadow: 0 24px 60px rgba(0,229,255,0.06); border-color: var(--accent); }
+        .founder-avatar { width:56px; height:56px; border-radius:50%; background: linear-gradient(135deg,var(--primary),var(--accent)); color:white; display:grid; place-items:center; font-weight:700; font-size:18px; border:3px solid rgba(255,255,255,0.06); }
+
+        /* timeline */
+        .timeline { position:absolute; top:18%; left:6%; right:6%; height:80px; z-index:7; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+        .timeline .bar { height:4px; width:80%; background: linear-gradient(90deg, rgba(0,229,255,0.28), rgba(108,99,255,0.28)); border-radius:4px; position:relative; box-shadow: 0 8px 30px rgba(0,229,255,0.03); }
+        .timeline .milestone { position:absolute; top:-14px; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; pointer-events:auto; }
+        .timeline .milestone .dot { width:18px; height:18px; border-radius:50%; background:rgba(255,255,255,0.06); border:2px solid var(--accent); box-shadow:0 8px 20px rgba(0,229,255,0.06); }
+        .timeline .milestone span { font-size:12px; color:var(--text-secondary); margin-top:6px; }
+
+        /* signature bar */
+        .signature-bar { margin-top:18px; display:flex; align-items:center; gap:14px; }
+        .signature { color: var(--accent); font-family: 'Poppins', sans-serif; font-weight:700; font-size:16px; position:relative; }
+        .signature::after { content: ''; position:absolute; left:0; bottom:-6px; height:2px; width:100%; background: linear-gradient(90deg, rgba(0,229,255,0.8), rgba(108,99,255,0.6)); transform-origin:left; transform:scaleX(0); transition:transform .9s cubic-bezier(.2,.9,.2,1); }
+
+        /* responsive */
+        @media (max-width: 980px) {
+            .about-content { grid-template-columns: 1fr; }
+            .about-visual { height:480px; }
+            .about-hero { font-size:32px; }
+            .founders { position:relative; bottom:unset; left:unset; justify-content:flex-start; margin-top:18px; }
+            .timeline { position:relative; top:unset; left:unset; right:unset; margin-top:8px; }
+            .about-glass::after { box-shadow: 0 0 30px rgba(0,229,255,0.06); }
+        }
+
+        /* Testimonials Section */
+        #testimonials {
+            padding: 120px 80px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .testimonials-carousel {
+            position: relative;
+            max-width: 900px;
+            margin: 60px auto 0;
+            overflow: hidden;
+        }
+
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial-card {
+            min-width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .testimonial-card.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+        }
+
+        .testimonial-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 700;
+            border: 3px solid var(--accent);
+        }
+
+        .testimonial-stars {
+            color: #FFD700;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-comment {
+            font-size: 20px;
+            font-style: italic;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .testimonial-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 22px;
+            color: var(--accent);
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .carousel-dot.active {
+            background: var(--accent);
+            width: 30px;
+            border-radius: 10px;
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 120px 80px;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 60px;
+            margin-top: 60px;
+        }
+    /* make merged contact card match the form height and fill its column */
+    .contact-info { display: flex; align-items: stretch; }
+    .contact-info .contact-info-card.merged { width:100%; display:flex; flex-direction:column; justify-content:flex-start; gap:20px; }
+    /* ensure card and form visually match size/spacing; increase padding for larger feel */
+    .contact-info .contact-info-card.merged, .contact-form { padding: 44px; box-sizing: border-box; }
+    /* larger typography inside merged card for better legibility */
+    /* Make contact headings bold, larger and uppercase per request; icons removed from markup */
+    .contact-info .contact-info-card.merged h4 { font-size: 28px; margin: 0 0 2px 0; color: var(--accent); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; line-height:1; }
+    /* Big section heading for the merged contact card */
+    .contact-info .contact-info-card.merged .contact-info-heading {
+        font-family: 'Poppins', sans-serif;
+        font-size: 44px;
+        margin: 0 0 12px 0;
+        color: var(--text-primary);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        z-index: 2;
+        text-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    }
+    /* slightly tighten the spacing under each small contact value so the final guidance line sits close */
+    .contact-info .contact-info-card.merged p { font-size: 16px; color: var(--text-secondary); margin: 0 0 2px 0; }
+    .contact-info .contact-info-card.merged .social-icons { margin-top: 6px; }
+    .contact-info .contact-info-card.merged .social-icon { width:56px; height:56px; font-size:20px; border-radius:50%; color: #ffffff; }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .contact-info-card {
+            /* use shared card surface variables so both cards match exactly */
+            background: linear-gradient(180deg, var(--card-bg-start), var(--card-bg-end));
+            backdrop-filter: var(--card-backdrop);
+            border: var(--card-border);
+            border-radius: var(--card-radius);
+            padding: 36px;
+            transition: all 0.32s cubic-bezier(.2,.9,.2,1);
+            position: relative; /* allow absolutely positioned decorative shapes inside */
+            overflow: visible;
+            box-shadow: var(--card-box-shadow);
+        }
+
+        .contact-info-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 46px 120px rgba(2,8,14,0.78), 0 18px 64px rgba(0,229,255,0.04);
+        }
+
+        /* Deep, elevated shadow specifically for the first / merged contact card */
+        .contact-info .contact-info-card.merged {
+            padding: 44px; /* ensure merged card breathes more */
+            box-shadow:
+                0 42px 120px rgba(2,8,14,0.78),
+                0 12px 48px rgba(0,229,255,0.04),
+                inset 0 1px 0 rgba(255,255,255,0.02);
+            transition: box-shadow 320ms ease, transform 320ms ease;
+        }
+
+        .contact-info .contact-info-card.merged::before {
+            /* subtle gradient stroke/glow around the card (simpler, cross-browser) */
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(90deg, rgba(108,99,255,0.08), rgba(0,229,255,0.06));
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: screen;
+            opacity: 0.9;
+        }
+
+        /* Ensure card text sits above decorative shapes */
+        .contact-info-card h4,
+        .contact-info-card p,
+        .contact-info-card .contact-detail,
+        .contact-info-card .contact-info-heading {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Decorative floating shapes container (inside merged card) */
+        .contact-floats {
+            position: absolute;
+            right: 28px;
+            top: 22px;
+            width: 220px;
+            height: 220px;
+            pointer-events: none;
+            z-index: 1;
+            overflow: visible;
+        }
+
+        
+
+        .contact-floats .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.14;
+            filter: blur(18px);
+            transform-origin: center;
+            mix-blend-mode: screen;
+            animation: float-slow 10s ease-in-out infinite;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        /* smaller, rounded-square tiles to mimic the attached image but scaled down */
+        .contact-floats .s1 { width: 88px; height: 88px; right: 6px; top: 8px; background: linear-gradient(135deg, rgba(108,99,255,0.92), rgba(0,229,255,0.7)); transform: rotate(-8deg); }
+        .contact-floats .s2 { width: 56px; height: 56px; right: 74px; top: 44px; background: linear-gradient(135deg, rgba(0,229,255,0.86), rgba(108,99,255,0.62)); transform: rotate(6deg); animation-duration: 9s; }
+        .contact-floats .s3 { width: 64px; height: 64px; right: 36px; top: 92px; background: linear-gradient(135deg, rgba(108,99,255,0.78), rgba(0,229,255,0.56)); transform: rotate(12deg); animation-duration: 12s; opacity: 0.10; }
+
+        /* tiny cyan spark dots like the sample (very subtle) */
+        .contact-floats .spark {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(0,229,255,0.95);
+            box-shadow: 0 0 8px rgba(0,229,255,0.6);
+            opacity: 0.9;
+            filter: none;
+        }
+
+        .contact-floats .sp1 { right: 28px; top: 12px; }
+        .contact-floats .sp2 { right: 110px; top: 28px; width:5px; height:5px; opacity:0.7; box-shadow:0 0 6px rgba(0,229,255,0.5); }
+        .contact-floats .sp3 { right: 14px; top: 110px; width:4px; height:4px; opacity:0.6; box-shadow:0 0 5px rgba(0,229,255,0.45); }
+
+        /* Hide decorative shapes on small screens to avoid visual clutter */
+        @media (max-width: 980px) {
+            .contact-floats { display: none; }
+        }
+
+        .contact-info-card h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        .contact-info-card p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        /* Contact item rows: icon + text alignment */
+    .contact-item { margin-bottom: 22px; }
+        .contact-row { display:flex; align-items:center; gap:14px; }
+        .contact-icon { width:22px; height:22px; flex:0 0 22px; color: var(--accent); }
+        .contact-row p { margin:0; color: var(--text-secondary); font-size: 17px; }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent);
+            transform: translateY(-3px);
+        }
+
+        /* Style the right-side contact form to visually match the left card */
+        .contact-form {
+            /* use shared card surface variables so both cards match exactly */
+            background: linear-gradient(180deg, var(--card-bg-start), var(--card-bg-end));
+            backdrop-filter: var(--card-backdrop);
+            border: var(--card-border);
+            border-radius: var(--card-radius);
+            padding: 36px;
+            transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms ease;
+            box-shadow: var(--card-box-shadow);
+            position: relative;
+        }
+
+        .contact-form:hover,
+        .contact-form:focus-within {
+            transform: translateY(-4px);
+            box-shadow: 0 44px 110px rgba(2,8,14,0.72), 0 10px 40px rgba(0,229,255,0.03);
+            border-color: rgba(0,229,255,0.06);
+        }
+
+        /* Add the same subtle gradient stroke to the form so both cards have identical surface detail */
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 1px;
+            background: linear-gradient(90deg, rgba(108,99,255,0.08), rgba(0,229,255,0.06));
+            pointer-events: none;
+            z-index: 0;
+            mix-blend-mode: screen;
+            opacity: 0.9;
+        }
+
+        /* Form groups and labels -------------------------------------------- */
+        .contact-form .form-group { margin-bottom: 20px; }
+
+        .contact-form label {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        /* Inputs and textarea ------------------------------------------------ */
+        .contact-form input[type="text"],
+        .contact-form input[type="email"],
+        .contact-form input[type="tel"],
+        .contact-form textarea,
+        .contact-form input[name="project_type"] {
+            width: 100%;
+            /* make inputs visually part of the same card surface */
+            background: transparent; /* reveal the card surface beneath */
+            border: 1px solid rgba(255,255,255,0.03);
+            color: var(--text-primary);
+            padding: 16px 18px;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.5;
+            transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); /* subtle inner highlight */
+        }
+
+        .contact-form input::placeholder,
+        .contact-form textarea::placeholder {
+            color: rgba(199,199,199,0.48);
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: rgba(0,229,255,0.55);
+            box-shadow: 0 8px 30px rgba(0,229,255,0.06), inset 0 2px 8px rgba(0,0,0,0.24);
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.01);
+        }
+
+        .contact-form textarea { min-height: 150px; resize: vertical; }
+
+        /* Submit button ----------------------------------------------------- */
+        .contact-form .form-submit {
+            display: inline-block;
+            padding: 14px 34px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: var(--text-primary);
+            border: none;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            box-shadow: 0 12px 40px rgba(108,99,255,0.18), 0 6px 20px rgba(0,229,255,0.06);
+            transition: transform 140ms ease, box-shadow 140ms ease;
+        }
+
+        .contact-form .form-submit:hover,
+        .contact-form .form-submit:focus {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 64px rgba(108,99,255,0.24), 0 12px 36px rgba(0,229,255,0.08);
+        }
+
+        /* Make sure the form doesn't look cramped on small screens */
+        @media (max-width: 980px) {
+            .contact-form { padding: 26px; border-radius: 18px; }
+            .contact-form .form-submit { width: 100%; text-align: center; }
+        }
+
+            /* Overlap styling: make the left merged contact card extend under the form on wide screens */
+            @media (min-width: 1025px) {
+                /* align items to the top so overlap looks intentional */
+                /* Move the entire contact block to the right so both cards shift together */
+                .contact-container { align-items: start; transform: translateX(180px); transition: transform 260ms ease; }
+                .contact-info { position: relative; }
+                /* merged card: keep only a vertical nudge so both columns align as a unit */
+                .contact-info .contact-info-card.merged {
+                    position: relative;
+                    z-index: 1;
+                    transform: translate(0, 110px);
+                    transition: transform 320ms ease, box-shadow 320ms ease;
+                    max-width: 520px;
+                }
+                /* form floats above the merged card and overlaps it; remove its horizontal transform so container controls horizontal position */
+                .contact-form {
+                    position: relative;
+                    z-index: 2;
+                    margin-left: -48px; /* overlap amount */
+                    box-shadow: 0 30px 80px rgba(0,0,0,0.65);
+                    max-width: 580px;
+                    transform: none;
+                    transition: transform 260ms ease;
+                }
+            }
+
+            /* Slightly reduce overlap on medium-large screens */
+            @media (min-width: 1280px) and (max-width: 1600px) {
+                .contact-form { margin-left: -48px; }
+                /* merged card: vertical nudge only on medium-large screens */
+                .contact-info .contact-info-card.merged { transform: translate(0, 94px); }
+                /* move container right slightly (smaller than desktop) */
+                .contact-container { transform: translateX(135px); }
+                .contact-form { transform: none; }
+            }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        /* Make form labels large and uppercase in the Contact form per user request */
+        .contact-form .form-group label { font-size: 15px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        /* Glass-style select: removes native arrow and adds custom glass design */
+        .form-group.select-wrap { position: relative; }
+        .form-group.select-wrap select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 14px 44px 14px 18px; /* room for custom arrow */
+            border-radius: 12px;
+            color: var(--text-primary);
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 18px 18px;
+        }
+
+        /* Custom arrow (white) using inline SVG background for consistent crispness */
+        .form-group.select-wrap select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M7 10l5 5 5-5z'/></svg>");
+        }
+
+        /* remove IE/Edge dropdown arrow */
+        .form-group.select-wrap select::-ms-expand { display: none; }
+
+        /* Focus state with accent glow like other glass elements */
+        .form-group.select-wrap select:focus {
+            box-shadow: 0 8px 30px rgba(0,229,255,0.08);
+            border-color: rgba(0,229,255,0.22);
+            transform: translateY(-2px);
+        }
+
+        /* Smaller arrow for very small screens */
+        @media (max-width: 480px) {
+            .form-group.select-wrap select { padding-right: 40px; background-size: 14px 14px; }
+        }
+
+        /* Custom select dropdown (fully styled) */
+        .custom-select { position: relative; display: block; }
+        .custom-select .cs-toggle {
+            width: 100%;
+            text-align: left;
+            padding: 14px 44px 14px 18px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .custom-select .cs-toggle:after {
+            content: '';
+            width: 18px;
+            height: 18px;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24'><path fill='%23FFFFFF' d='M7 10l5 5 5-5z'/></svg>");
+            background-size: 18px 18px;
+            background-repeat: no-repeat;
+            margin-left: 12px;
+            opacity: 0.95;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+        }
+
+        .custom-select .cs-options {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 10px);
+            background: linear-gradient(180deg, rgba(12,12,18,0.96), rgba(8,8,12,0.96));
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            max-height: 260px;
+            overflow: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            z-index: 60;
+            padding: 6px;
+        }
+
+        .custom-select .cs-option {
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            margin: 4px 0;
+        }
+
+        .custom-select .cs-option[aria-selected="true"],
+        .custom-select .cs-option:hover {
+            background: rgba(108,99,255,0.08);
+            color: var(--text-primary);
+        }
+
+        /* scrollbar for options */
+        .custom-select .cs-options::-webkit-scrollbar { width: 10px; }
+        .custom-select .cs-options::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 8px; }
+
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(108, 99, 255, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 80px 30px;
+            background: rgba(15, 15, 15, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 32px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px var(--accent);
+        }
+
+        .footer-desc {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .footer-section h4 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .footer-gradient {
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            margin-bottom: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            header {
+                padding: 20px 40px;
+            }
+
+            section {
+                padding: 80px 40px;
+            }
+
+            #home {
+                flex-direction: column;
+                gap: 50px;
+                padding-top: 120px;
+            }
+
+            .home-left h1 {
+                font-size: 56px;
+            }
+
+            .video-stack {
+                height: 400px;
+            }
+
+            .about-content,
+            .contact-container,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .about-visual {
+                height: 400px;
+            }
+            /* Make contact cards stretch to match form height when stacked in grid */
+            .contact-container { align-items: stretch; }
+            .contact-info { display: block; }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 20px;
+                font-size: 14px;
+            }
+
+            .home-left h1 {
+                font-size: 42px;
+            }
+
+            .home-left p {
+                font-size: 18px;
+            }
+
+            .home-buttons {
+                flex-direction: column;
+            }
+
+            .section-header h2 {
+                font-size: 42px;
+            }
+
+            .portfolio-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                gap: 10px;
+            }
+
+            .filter-tab {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            /* mobile: merged contact card should be full width and sit above the form */
+            .contact-container { grid-template-columns: 1fr !important; }
+            .contact-info { order: 2; }
+            .contact-form { order: 3; }
+
+            /* Ensure the home/video stack becomes a simple vertical flow on small tablets and large phones
+               (forces strict one-below-the-other stacking regardless of earlier absolute transforms). */
+            .home-right { order: 2; }
+            .video-stack {
+                position: static !important;
+                height: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 14px !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+
+            .video-card {
+                position: relative !important;
+                width: calc(100% - 32px) !important;
+                max-width: 520px !important;
+                height: auto !important;
+                border-radius: 14px !important;
+                overflow: hidden !important;
+                transform: none !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+
+            /* Explicitly override any nth-child transforms (these had higher specificity earlier).
+               Use the same specificity (nth-child) with !important so mobile stacking cannot be broken. */
+            .video-stack .video-card:nth-child(1),
+            .video-stack .video-card:nth-child(2),
+            .video-stack .video-card:nth-child(3) {
+                transform: none !important;
+                margin: 0 auto !important;
+                left: auto !important;
+                top: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+
+            .video-card video, .video-card iframe {
+                width: 100% !important;
+                height: auto !important;
+                aspect-ratio: 16/9 !important;
+                display: block !important;
+            }
+        }
+
+        /* Mobile-first enhancements: make layout friendlier on small phones */
+        @media (max-width: 480px) {
+            html, body { font-size: 15px; }
+            header { padding: 12px 18px; }
+            .logo { font-size: 20px; }
+            .menu-toggle { display: inline-flex; align-items:center; justify-content:center; font-size:22px; background:transparent; border:none; color:var(--text-primary); cursor:pointer; min-width:48px; min-height:48px; }
+            nav { position: absolute; top: 64px; right: 12px; background: linear-gradient(180deg, rgba(12,12,18,0.98), rgba(8,8,12,0.98)); border-radius: 12px; box-shadow: 0 16px 60px rgba(0,0,0,0.6); display:none; z-index: 2000; }
+            nav.open { display:block; }
+            nav ul { display:flex; flex-direction:column; gap:8px; padding:12px; min-width:180px; }
+            nav a { font-size:16px; padding:10px 6px; display:block; min-height:44px; }
+
+            /* Hide custom cursor on touch devices for usability */
+            .cursor-glow { display: none; }
+
+            /* Home hero and video stack adjustments */
+            /* Stack home content vertically and make video cards responsive */
+            /* Increase top padding so the fixed navbar doesn't visually overlap the hero on small screens */
+            #home { padding-top: 96px; display:flex; flex-direction:column; gap:18px; }
+            .home-left { order: 1; text-align: center; }
+            .home-left h1 { font-size: 30px; }
+            .home-left p { font-size: 15px; }
+            .home-right { order: 2; display:flex; justify-content:center; }
+            .video-stack { position: static; height: auto; display:flex; flex-direction:column; gap: 14px; align-items:center; justify-content:center; }
+            .video-card { position: relative; width: calc(100% - 32px); max-width: 360px; height: auto; border-radius: 14px; overflow: hidden; transform: none !important; }
+            .video-card video, .video-card iframe { width:100%; height:auto; aspect-ratio: 16/9; display:block; }
+
+            /* Newsletter card stacks vertically and compresses */
+            .newsletter-card { padding: 20px; gap: 14px; }
+            .newsletter-card .newsletter-content h2 { font-size: 20px; }
+            /* ensure newsletter form elements are stacked and full width on very small phones */
+            .newsletter-card .newsletter-form { display:flex; flex-direction: column; gap: 12px; align-items: stretch; }
+            .newsletter-card .newsletter-form input { width: 100%; }
+            .newsletter-card .newsletter-form button { width: 100%; }
+
+            /* Modal responsiveness */
+            .modal .modal-content { width: 96%; max-width: none; padding: 12px; }
+            .modal-video { height: calc(56.25vw); /* 16:9 */ }
+            /* On very small phones make the modal full-screen for better viewing */
+            .modal .modal-content.fullscreen, .modal.fullscreen .modal-content { width:100%; max-width:none; height:100vh; border-radius:0; padding:12px; }
+            .modal.fullscreen .modal-video, .modal .modal-content.fullscreen .modal-video { height: calc(100vh - 96px); }
+
+            /* Portfolio: ensure single column and smaller thumbs */
+            .portfolio-grid { grid-template-columns: 1fr; gap: 18px; }
+            .portfolio-grid .thumb-wrap { height: 160px; }
+
+            /* About section adjustments */
+            .about-hero { font-size: 28px; }
+            .about-text { font-size: 14px; }
+
+            /* Contact: ensure form and info are full width and touch-friendly */
+            /* Contact: ensure form and info are full width, stacked and inside viewport */
+            .contact-info-card.merged, .contact-form { padding: 20px; transform: none !important; margin-left: 0 !important; max-width: 100% !important; }
+            .contact-container { grid-template-columns: 1fr !important; transform: none !important; }
+            .contact-info .contact-info-card.merged { transform: none !important; position: relative !important; }
+            .contact-info .contact-info-card.merged h4 { font-size: 20px; }
+            .contact-info .contact-info-card.merged p { font-size: 15px; }
+
+            /* Reduce visual noise: smaller floating shapes or hide entirely on very small screens */
+            .contact-floats { display: none !important; }
+        }
+
+        /* Slightly larger phones/tablets portrait */
+        @media (min-width: 481px) and (max-width: 768px) {
+            header { padding: 14px 22px; }
+            .menu-toggle { display:inline-flex; }
+            nav { display:none; }
+            nav.open { display:block; }
+            .cursor-glow { display:none; }
+            .video-stack { height: 340px; }
+            .video-card { width: 260px; height:150px; }
+            .contact-floats { right: 22px; top: 24px; }
+        }
+   
